@@ -1,0 +1,9 @@
+# Spike working files: never commit disk images, installers, keys or run output.
+work/
+probe-*/
+*.qcow2
+*.iso
+*.img
+*.pid
+*.launched
+__pycache__/
