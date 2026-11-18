@@ -164,7 +164,9 @@ def cmd_disk(a) -> None:
     wd.mkdir(parents=True, exist_ok=True)
     qi = qemu_img(a)
     if a.overlay:
-        base = wd / "base.qcow2"
+        # qcow2 stores the backing path relative to the overlay's own directory, so with a
+        # relative --workdir a relative -b path is resolved twice (work\work\base.qcow2).
+        base = (wd / "base.qcow2").resolve()
         out = wd / f"{a.overlay}.qcow2"
         cmd = [qi, "create", "-f", "qcow2", "-b", str(base), "-F", "qcow2", str(out)]
     else:
@@ -299,11 +301,15 @@ def cmd_probe(a) -> None:
 
     try:
         video = connect_first_socket(host, port, a.timeout)
+        # Order matters: DesktopConnection.open() accepts the video socket, writes the
+        # dummy byte, then blocks in accept() for the control socket. The device name and
+        # the codec id are written only after every socket is accepted, so the control
+        # socket must be connected before anything but the dummy byte is read here.
+        control = socket.create_connection((host, port), timeout=10)
         name = read_exact(video, DEVICE_NAME_FIELD_LENGTH).split(b"\0", 1)[0].decode("utf-8", "replace")
         codec = struct.unpack(">I", read_exact(video, 4))[0]
         if codec != CODEC_H264:
             sys.exit(f"unexpected codec id 0x{codec:08x}")
-        control = socket.create_connection((host, port), timeout=10)
         result.update(device_name=name, codec="h264")
 
         frames: queue.Queue = queue.Queue()
