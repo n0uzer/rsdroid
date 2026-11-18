@@ -1,6 +1,7 @@
 # Spike working files: never commit disk images, installers, keys or run output.
 work/
 probe-*/
+scrcpy-server*
 *.qcow2
 *.iso
 *.img
