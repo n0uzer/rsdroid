@@ -53,13 +53,19 @@ def main() -> None:
 
     def queue_state() -> tuple[int, list[str], list[float]]:
         """Return (length, kinds, ages). The queue mixes Motion- and KeyEvents; because it
-        is a fixed-size ring buffer only the ages tell fresh events apart."""
+        is a fixed-size ring buffer only the ages tell fresh events apart.
+
+        The queue block also contains DeviceResetEvent/ConfigurationChangedEvent lines, so
+        capture every 4-space-indented line and read kind+age per line instead of assuming
+        the block starts with a Motion/KeyEvent.
+        """
         txt = adb("shell", "dumpsys input")
-        m = re.search(r"RecentQueue: length=(\d+)\n((?:    (?:Motion|Key)Event[^\n]*\n)*)", txt)
+        m = re.search(r"RecentQueue: length=(\d+)\n((?:    .*\n)*)", txt)
         if not m:
             return -1, [], []
-        kinds = re.findall(r"    (Motion|Key)Event", m.group(2))
-        ages = [float(x) for x in re.findall(r"age=([0-9.]+)ms", m.group(2))]
+        pairs = re.findall(r"^    (Motion|Key)Event[^\n]*?age=([0-9.]+)ms", m.group(2), re.M)
+        kinds = [k for k, _ in pairs]
+        ages = [float(v) for _, v in pairs]
         return int(m.group(1)), kinds, ages
 
     out = Path(a.out)

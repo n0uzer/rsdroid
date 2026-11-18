@@ -64,13 +64,18 @@ def main() -> None:
         return r.stdout.strip()
 
     def recents() -> list[tuple[str, float]]:
-        """RecentQueue holds MotionEvents and KeyEvents mixed; keep both with their age."""
+        """RecentQueue holds MotionEvents and KeyEvents mixed; keep both with their age.
+
+        The block also contains DeviceResetEvent/ConfigurationChangedEvent lines, so capture
+        every 4-space-indented line and read kind+age per line rather than assuming the block
+        starts with a Motion/KeyEvent (otherwise the ages are missed and fresh events read 0).
+        """
         txt = adb("shell", "dumpsys input")
-        m = re.search(r"RecentQueue: length=\d+\n((?:    (?:Motion|Key)Event[^\n]*\n)*)", txt)
+        m = re.search(r"RecentQueue: length=\d+\n((?:    .*\n)*)", txt)
         if not m:
             return []
         return [(kind, float(age)) for kind, age in
-                re.findall(r"    (Motion|Key)Event, age=([0-9.]+)ms", m.group(1))]
+                re.findall(r"^    (Motion|Key)Event[^\n]*?age=([0-9.]+)ms", m.group(1), re.M)]
 
     out = Path(a.out)
     out.mkdir(exist_ok=True)
