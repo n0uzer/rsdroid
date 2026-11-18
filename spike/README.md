@@ -66,17 +66,21 @@ Find the working combination and record every extra option. Candidates to try, o
 a time (add with `--accel`, `--cpu`, `--disk-if`, `--vga`, `--extra`):
 
 - `--accel whpx`, then `--accel whpx,kernel-irqchip=off`
-- no `--cpu`, then `--cpu qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt`, then `--cpu max`
+- no `--cpu` (on one AMD host the guest then hung on a black screen), then
+  `--cpu qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt` (worked there), then `--cpu max` (crashed
+  QEMU under WHPX on that host: `failed to get xsave state`)
 - `--disk-if ide` (AHCI on q35, the default), then `--disk-if virtio`
 - guest kernel command-line options, if the image needs any
 
 `launch` writes the exact command line to `work\<name>.cmdline.txt`. Copy the working
 one into the ADR.
 
-ADB over TCP: enable Developer options and USB debugging in the guest. If adbd does not
-listen on TCP port 5555, a candidate fix from the guest shell is
-`setprop service.adb.tcp.port 5555` followed by restarting adbd. Record what was needed
-and make it persistent in the base image before the final power off, if possible.
+ADB over TCP: on Android-x86 9.0-r2 adbd already listened on port 5555 from early boot, so
+no `setprop` was needed. What did break (see `docs/adr/0001-feasibility.md`, finding 2): the
+image had no `adb_keys` and showed no authorization dialog, and the guest got no IP address,
+so `adb` reported the device offline while adbd was running. If `boot` times out, check the
+guest's network and ADB authorization first. Record what was needed, and make it persistent
+in the base image before the final power off, if possible.
 
 ## 3. Boot one headless instance (criterion 1)
 
@@ -102,8 +106,12 @@ It pushes the server, turns on the Android pointer-location overlay, starts the 
 with `tunnel_forward=true`, receives frames, saves `frame0.png`, sends DOWN and UP at the
 screen centre and saves `after_tap.png` when the picture changes. Check `after_tap.png`
 shows the touch crosshair and coordinates near the centre. `probe.json` holds device name,
-frame size, time to first frame and a rough tap-to-changed-frame time (host side only,
-no display scan-out). `server.log` holds the server output; keep it if anything fails.
+frame size, time to first frame and a tap-to-changed-frame time. **Do not trust that time
+or the "frame changed" result as proof of a tap**: any animation on the home screen counts
+as a change, which gave a false positive in the first Windows run. Confirm the tap in the
+guest instead, for example by counting new MotionEvents in the InputDispatcher
+`RecentQueue` (a ring buffer of 10 events, so compare event ages, not its length) before
+and after. `server.log` holds the server output; keep it if anything fails.
 
 ## 5. Two instances (criterion 4)
 
