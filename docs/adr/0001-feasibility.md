@@ -1,9 +1,8 @@
 # ADR 0001: Feasibility of QEMU + WHPX + scrcpy-server
 
-Status: **Draft** (accepted by the maintainer). All four go criteria pass on the target
-platform, both with Hyper-V, WSL2 and Virtual Machine Platform (VMP) off and with them on.
-The recommendation is **go**; see "Decision". The status stays Draft until the maintainer
-accepts it.
+Status: **Draft.** All four go criteria pass on the target platform, both with Hyper-V, WSL2
+and Virtual Machine Platform (VMP) off and with them on. The recommendation is **go**; see
+"Decision". The status stays Draft until the maintainer accepts it.
 
 ## Context
 
