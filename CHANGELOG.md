@@ -20,7 +20,7 @@ All notable changes to this project are documented here. The format follows
 - GitHub Actions CI (fmt, clippy, test, build, `cargo deny`, manifest validation),
   Dependabot, issue and pull request templates, and `SECURITY.md`.
 - ADR 0001 accepted (feasibility), ADR 0002 (project foundations) and ADR 0003
-  (performance budget).
+  (performance budget, accepted with a 60 s boot / 65 s ADB-ready gate).
 
 ### Changed
 

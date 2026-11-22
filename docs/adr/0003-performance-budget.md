@@ -1,8 +1,7 @@
 # ADR 0003: Performance budget
 
-Status: **Proposed** on 2026-11-22, awaiting maintainer approval. The boot and
-ADB-ready targets change the proposal in `PLAN.md` and must not be treated as accepted
-until the maintainer signs off.
+Status: **Accepted** on 2026-11-22 by the maintainer. The boot and ADB-ready targets
+below replace the proposal in `PLAN.md` and are the v0.1 gate.
 
 ## Context
 
@@ -56,9 +55,9 @@ it.
 No benchmark gate or baseline exists yet, so no check is being made green. `PLAN.md`
 explicitly says the table is a proposal to be replaced using M-1 measurements. The
 change is isolated to boot/ADB-ready, is based on measurements on faster hardware, and
-is submitted as a Proposed ADR for the maintainer rather than applied silently. All
-other targets are kept, and the unmeasured ones remain requirements to measure in
-M2/M3, not assumptions.
+was submitted as a Proposed ADR and approved by the maintainer rather than applied
+silently. All other targets are kept, and the unmeasured ones remain requirements to
+measure in M2/M3, not assumptions.
 
 ## Measurement rules
 
