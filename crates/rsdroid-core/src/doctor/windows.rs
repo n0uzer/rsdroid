@@ -530,50 +530,11 @@ fn check_data_dir(options: &DoctorOptions) -> Check {
 }
 
 fn find_qemu(options: &DoctorOptions) -> Option<PathBuf> {
-    let mut candidates = Vec::new();
-    if let Some(path) = &options.qemu {
-        candidates.push(path.clone());
-    }
-    if let Some(path) = std::env::var_os("RSDROID_QEMU") {
-        candidates.push(PathBuf::from(path));
-    }
-    if let Some(path) = find_on_path("qemu-system-x86_64.exe") {
-        candidates.push(path);
-    }
-    candidates.push(PathBuf::from(
-        r"C:\Program Files\qemu\qemu-system-x86_64.exe",
-    ));
-    if let Some(local) = std::env::var_os("LOCALAPPDATA") {
-        candidates.push(PathBuf::from(local).join(r"rsdroid\tools\qemu\qemu-system-x86_64.exe"));
-    }
-    candidates.into_iter().find(|path| path.is_file())
+    crate::tools::find_qemu(options.qemu.as_deref())
 }
 
 fn find_adb(options: &DoctorOptions) -> Option<PathBuf> {
-    let mut candidates = Vec::new();
-    if let Some(path) = &options.adb {
-        candidates.push(path.clone());
-    }
-    if let Some(path) = find_on_path("adb.exe") {
-        candidates.push(path);
-    }
-    for variable in ["ANDROID_SDK_ROOT", "ANDROID_HOME"] {
-        if let Some(root) = std::env::var_os(variable) {
-            candidates.push(PathBuf::from(root).join(r"platform-tools\adb.exe"));
-        }
-    }
-    if let Some(local) = std::env::var_os("LOCALAPPDATA") {
-        candidates.push(PathBuf::from(local).join(r"Android\Sdk\platform-tools\adb.exe"));
-    }
-    candidates.push(PathBuf::from(r"C:\Android\platform-tools\adb.exe"));
-    candidates.into_iter().find(|path| path.is_file())
-}
-
-fn find_on_path(executable: &str) -> Option<PathBuf> {
-    let path = std::env::var_os("PATH")?;
-    std::env::split_paths(&path)
-        .map(|directory| directory.join(executable))
-        .find(|candidate| candidate.is_file())
+    crate::tools::find_adb(options.adb.as_deref())
 }
 
 fn run_capture(

@@ -7,6 +7,7 @@
 pub mod doctor;
 pub mod error;
 pub mod paths;
+pub mod tools;
 
 pub use error::{Error, Result};
 

@@ -15,7 +15,10 @@ path = "src/main.rs"
 
 [dependencies]
 clap.workspace = true
+ctrlc.workspace = true
+rsdroid-adb = { path = "../rsdroid-adb", version = "0.1.0-alpha.0" }
 rsdroid-core = { path = "../rsdroid-core", version = "0.1.0-alpha.0" }
+rsdroid-vm = { path = "../rsdroid-vm", version = "0.1.0-alpha.0" }
 serde_json.workspace = true
 thiserror.workspace = true
 tracing.workspace = true

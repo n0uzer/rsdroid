@@ -9,6 +9,7 @@ it; do not rewrite history.
 | [0001](0001-feasibility.md) | Feasibility of QEMU + WHPX + scrcpy-server | Accepted 2026-11-22 |
 | [0002](0002-project-foundations.md) | Project foundations: name, license, base image, toolchain | Accepted 2026-11-22 |
 | [0003](0003-performance-budget.md) | Performance budget | Accepted 2026-11-22 |
+| [0004](0004-m1-vm-boot.md) | M1 VM boot strategy | Accepted 2026-11-22 |
 
 Statuses: **Proposed** (awaiting the maintainer), **Accepted**, **Superseded by NNNN**,
 **Rejected**. Numbers are never reused.
