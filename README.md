@@ -9,8 +9,9 @@ no telemetry and no bundled store.
 
 ## Status
 
-Milestone **M0 (foundations)**. The workspace, CI and `rsdroid doctor` exist. There
-is no VM launcher yet: `rsdroid doctor` is the only useful command until M1.
+Milestone **M1 (boot one VM headless)**. `rsdroid run <instance>` boots the pinned
+Android-x86 ISO under WHPX, waits for `sys.boot_completed=1`, and `rsdroid stop
+<instance>` powers it down through QMP. Video arrives in M2 and the manager in M3.
 
 See [`PLAN.md`](PLAN.md) for the roadmap and [`docs/adr/`](docs/adr/) for decisions.
 
@@ -43,6 +44,35 @@ cargo run -p rsdroid-cli -- doctor --bundle --bundle-dir .\reports
 The bundle is a local ZIP with the report and existing logs. It is never uploaded;
 review it before attaching it to an issue.
 
+## Boot one VM
+
+M1 boots the verified Android-x86 ISO live. QEMU must be installed (M1 does not bundle
+it), and the kernel/initrd must be extracted once from the ISO:
+
+```powershell
+pwsh tools/fetch-deps.ps1 -Component android-x86
+pwsh tools/extract-boot-files.ps1
+cargo run -p rsdroid-cli -- run demo
+```
+
+`run` prints the QEMU pid, the loopback ADB serial and the gateway to the QMP socket,
+then stays in the foreground until Ctrl+C. From another terminal, a clean shutdown is:
+
+```powershell
+cargo run -p rsdroid-cli -- stop demo
+```
+
+Useful flags:
+
+- `--debug-window` shows QEMU's own SDL window when the guest does not boot.
+- `--dry-run` prints the exact QEMU command line without starting anything.
+- `--cpus`, `--memory-mb`, `--adb-port`, `--qmp-port` and `--serial-port` override the
+  defaults (2 vCPU, 3072 MiB, 15555/14444/14555).
+- `--boot-timeout` bounds the wait for `sys.boot_completed` (default 180 s).
+
+Run state and the QEMU log live in `%LOCALAPPDATA%\rsdroid\run\<instance>\`. The state
+file is ephemeral; M3 replaces it with the persistent instance model.
+
 ## Pinned dependencies
 
 QEMU, scrcpy-server and the Android-x86 image are not stored in git. Versions, URLs
@@ -60,7 +90,8 @@ pwsh tools/fetch-deps.ps1 -CheckOnly
 ```
 
 QEMU is downloaded and verified but not executed; install it to
-`C:\Program Files\qemu` or pass `--qemu <path>` to `doctor`.
+`C:\Program Files\qemu` or pass `--qemu <path>`. M1 uses the installed build; bundling
+QEMU is deferred to the M7 installer decision.
 
 ## Repository layout
 

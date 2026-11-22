@@ -19,8 +19,20 @@ All notable changes to this project are documented here. The format follows
   scrcpy-server and Android-x86, resume support, `-CheckOnly` and `-VerifyManifest`.
 - GitHub Actions CI (fmt, clippy, test, build, `cargo deny`, manifest validation),
   Dependabot, issue and pull request templates, and `SECURITY.md`.
-- ADR 0001 accepted (feasibility), ADR 0002 (project foundations) and ADR 0003
-  (performance budget, accepted with a 60 s boot / 65 s ADB-ready gate).
+- ADR 0001 accepted (feasibility), ADR 0002 (project foundations), ADR 0003
+  (performance budget, accepted with a 60 s boot / 65 s ADB-ready gate) and ADR 0004
+  (M1 uses an installed QEMU and boots the pinned Android-x86 ISO live).
+- M1: `rsdroid run <instance>` boots one headless Android-x86 VM from a typed config,
+  forwards ADB over loopback, waits for `sys.boot_completed=1`, holds QEMU in a
+  kill-on-close Job Object and powers down through QMP.
+- M1: `rsdroid stop <instance>` sends `system_powerdown`, waits for a clean shutdown and
+  falls back to QMP `quit`.
+- M1: a loopback QMP client with `query-status`, `system_powerdown`, `system_reset`,
+  `stop`, `cont` and `quit`, plus recorded-response tests.
+- M1: `tools/extract-boot-files.ps1` extracts the pinned ISO's kernel and initrd so
+  `VIRT_WIFI=0` can be passed on the kernel command line.
+- Shared tool discovery in `rsdroid-core` so `doctor`, `run` and `stop` agree on the
+  QEMU and adb paths.
 
 ### Changed
 
