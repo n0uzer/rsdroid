@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Roadmap and milestones
+    url: https://github.com/n0uzer/rsdroid/blob/main/PLAN.md
+    about: Read the plan before proposing work that belongs to a later milestone.
+  - name: Security policy
+    url: https://github.com/n0uzer/rsdroid/blob/main/SECURITY.md
+    about: Report vulnerabilities privately, never in a public issue.
+  - name: Contributing guide
+    url: https://github.com/n0uzer/rsdroid/blob/main/CONTRIBUTING.md
+    about: Setup, required checks and code conventions.
