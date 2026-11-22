@@ -1,0 +1,28 @@
+# Build output
+/target/
+**/*.rs.bk
+
+# Large fetched artifacts: never commit images or disks
+*.iso
+*.img
+*.qcow2
+*.vhd
+*.vhdx
+*.zip
+!tools/fixtures/**/*.zip
+
+# Local dependency cache and spike scratch space
+/.deps/
+/spike/work/
+work/
+
+# Editor and OS noise
+.vs/
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+
+# Local logs
+*.log

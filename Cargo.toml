@@ -1,0 +1,56 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/rsdroid-core",
+    "crates/rsdroid-vm",
+    "crates/rsdroid-adb",
+    "crates/rsdroid-scrcpy",
+    "crates/rsdroid-decode",
+    "crates/rsdroid-render",
+    "crates/rsdroid-keymap",
+    "crates/rsdroid-ipc",
+    "crates/rsdroid-cli",
+    "crates/rsdroid-app",
+]
+
+[workspace.package]
+version = "0.1.0-alpha.0"
+edition = "2021"
+rust-version = "1.89"
+license = "GPL-3.0-or-later"
+authors = ["rsdroid contributors"]
+repository = "https://github.com/n0uzer/rsdroid"
+publish = false
+
+[workspace.dependencies]
+assert_cmd = "2.2.2"
+clap = { version = "4.6.9", features = ["derive", "env", "wrap_help"] }
+libloading = "0.9.1"
+predicates = "3.1.4"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+tempfile = "3.27.0"
+thiserror = "2.0.21"
+time = "0.3.55"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+wait-timeout = "0.2.1"
+winreg = "0.56.0"
+windows-sys = { version = "0.61.2", features = [
+    "Win32_Foundation",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_LibraryLoader",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+] }
+zip = { version = "9.8.1", default-features = false }
+
+[workspace.lints.rust]
+rust_2018_idioms = { level = "warn", priority = -1 }
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+expect_used = "warn"
+todo = "warn"
+unwrap_used = "warn"
