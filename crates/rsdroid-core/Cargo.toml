@@ -1,0 +1,30 @@
+[package]
+name = "rsdroid-core"
+description = "Instance model, configuration, events, environment diagnostics and manager core for rsdroid"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+time.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+zip.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+libloading.workspace = true
+wait-timeout.workspace = true
+windows-sys.workspace = true
+winreg.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

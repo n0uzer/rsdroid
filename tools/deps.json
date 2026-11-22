@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "updated": "2026-11-22",
+  "deps": [
+    {
+      "id": "qemu",
+      "version": "11.1.0",
+      "build": "20260811",
+      "kind": "installer",
+      "url": "https://qemu.weilnetz.de/w64/qemu-w64-setup-20260811.exe",
+      "hash": {
+        "algorithm": "sha512",
+        "value": "5bcf9eed634e8575a37b74f445af41a2fe4106da512d0c30c368301d4c105037fdfab40a5287367a28a957624cddebbc8c07e16c88ab6634f554cdf3d16bf543"
+      },
+      "size": 206615928,
+      "dest": "tools/qemu/qemu-w64-setup-20260811.exe",
+      "license": "GPL-2.0-only",
+      "homepage": "https://qemu.weilnetz.de/w64/",
+      "notes": "NSIS installer. Install to C:\\Program Files\\qemu, or pass --qemu <path>. Bundling QEMU is an M1 decision."
+    },
+    {
+      "id": "scrcpy-server",
+      "version": "5.0.1",
+      "kind": "file",
+      "url": "https://github.com/Genymobile/scrcpy/releases/download/v5.0.1/scrcpy-server-v5.0.1",
+      "hash": {
+        "algorithm": "sha256",
+        "value": "764eb6f79811d5211fe9df341120882ba9994c7a61b897d7bf3fb662e53bc536"
+      },
+      "size": 733930,
+      "dest": "tools/scrcpy/scrcpy-server-v5.0.1",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/Genymobile/scrcpy/releases/tag/v5.0.1",
+      "notes": "Pinned protocol; the server rejects clients with a different version string."
+    },
+    {
+      "id": "android-x86",
+      "version": "9.0-r2",
+      "kind": "image",
+      "url": "https://downloads.sourceforge.net/project/android-x86/Release%209.0/android-x86_64-9.0-r2.iso",
+      "hash": {
+        "algorithm": "sha256",
+        "value": "f7eb8fc56f29ad5432335dc054183acf086c539f3990f0b6e9ff58bd6df4604e"
+      },
+      "size": 965738496,
+      "dest": "images/android-x86_64-9.0-r2.iso",
+      "license": "GPL-2.0-or-later AND Apache-2.0 (components)",
+      "homepage": "https://www.android-x86.org/releases/releasenote-9-0-r2.html",
+      "notes": "Chosen base image at M0 (ADR 0002). The ADR records the guest-network and adb_keys fixes needed by M1."
+    }
+  ]
+}

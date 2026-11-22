@@ -220,16 +220,18 @@ CI is set up in M0 and the release pipeline is added in M7. Everything runs in G
 
 ### Cross-cutting: performance budget and benchmarks
 
-The targets below are proposals for a reference machine with 4 cores, 16 GB RAM and an integrated GPU. Replace them with numbers based on the M-1 measurements and record the final budget in an ADR during M0.
+The final budget is fixed by [ADR 0003](docs/adr/0003-performance-budget.md) for a reference machine with 4 cores, 16 GB RAM and an integrated GPU. The 45 s boot proposal is a stretch goal, not the gate.
 
-| Metric | Proposed target (v0.1) | How measured |
+| Metric | Target (v0.1) | How measured |
 | --- | --- | --- |
-| Cold boot to home screen | 45 s or less | Time until `sys.boot_completed` is 1 |
+| Guest boot to `sys.boot_completed=1` | 60 s or less | Time until `sys.boot_completed` is 1 |
+| Launch to ADB ready | 65 s or less | `adb wait-for-device` plus boot property, with `VIRT_WIFI=0` |
 | Clone an instance | 5 s or less | `rsdroid bench clone` |
-| Host overhead per running instance, excluding guest RAM | 200 MB or less | Working set of rsdroid processes |
-| Idle host CPU per running instance | 5% of one core or less | Performance counters over 60 s idle |
+| Host overhead per running instance, excluding guest RAM | 200 MB or less | Working set of rsdroid processes minus guest RAM |
+| Idle host CPU per running instance | 3% of one core or less | Performance counters over 60 s idle |
 | Video, software decode | 30 fps at 720p | Frame counter in the render crate |
-| Tap-to-pixel latency, software path | 100 ms or less | Timestamped test app or high-speed capture |
+| First frame after starting the stream | 3 s or less | Time from probe start to decoded frame |
+| Tap-to-pixel latency, software path | 100 ms or less (p90) | Timestamped test app or high-speed capture |
 | Manager startup | 1 s or less | Cold start to first UI frame |
 
 Harness and gates:

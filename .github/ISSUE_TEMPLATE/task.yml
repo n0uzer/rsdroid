@@ -1,0 +1,73 @@
+name: Task
+description: A scoped unit of work with verifiable acceptance criteria
+title: "task: "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Work through `PLAN.md` milestone by milestone. Read `AGENTS.md` first.
+        Every task has five parts: goal, context, constraints, acceptance criteria and
+        out of scope. If the acceptance criteria are missing, they must be derived from
+        `PLAN.md` and stated in the issue before coding starts.
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      options:
+        - M0 Foundations
+        - M1 Boot one VM headless
+        - M2 Video and input through scrcpy
+        - M3 Multi-instance manager
+        - M4 Keymapping and gamepad
+        - M5 Quality of life and clean image
+        - M6 GPU acceleration research
+        - M7 Packaging and 0.1 release
+        - Cross-cutting
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: One sentence.
+      placeholder: What should exist or work when this is done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Files, ADRs and PLAN.md sections to read first.
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Anything from the Boundaries section of AGENTS.md that applies.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Commands or checks that can be run, not opinions.
+      placeholder: |
+        - `cargo test -p rsdroid-core` passes with a test for ...
+        - `rsdroid doctor --json` contains ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope
+      description: What must not be touched in this task.
+    validations:
+      required: true
